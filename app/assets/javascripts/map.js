@@ -4,19 +4,14 @@ $(window).ready(function(){
         provider: {},
         internal: {id: 'map'}
     }, function(){
+        handler.map.centerOn({ "lat": -37.8136, "lng": 144.9631 });
         markers = handler.addMarkers([
             {
-                "lat": 0,
-                "lng": 0,
-                "picture": {
-                    "url": "https://addons.cdn.mozilla.net/img/uploads/addon_icons/13/13028-64.png",
-                    "width":  36,
-                    "height": 36
-                },
-            "infowindow": "hello!"
+                "lat": -37.8204706,
+                "lng": 144.9730166
             }
         ]);
-        handler.bounds.extendWith(markers);
+        // handler.bounds.extendWith(markers);
         handler.fitMapToBounds();
     });
 });
