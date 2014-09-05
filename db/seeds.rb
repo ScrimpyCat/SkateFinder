@@ -1,7 +1,31 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the rake db:seed (or created alongside the db with db:setup).
-#
-# Examples:
-#
-#   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
-#   Mayor.create(name: 'Emanuel', city: cities.first)
+ObstacleName.create([
+    { :name => 'quarter pipe' },
+    { :name => 'half-pipe' },
+    { :name => 'bowl' },
+    { :name => 'deck' },
+    { :name => 'spine' },
+    { :name => 'extension' },
+    { :name => 'escalator' },
+    { :name => 'flat' },
+    { :name => 'vert wall' },
+    { :name => 'bank' },
+    { :name => 'hip' },
+    { :name => 'funbox' },
+    { :name => 'pyramid' },
+    { :name => 'launcher/kicker' },
+    { :name => 'roll-in' },
+    { :name => 'step-up/eurobox' },
+    { :name => 'wall-box' },
+    { :name => 'pool' },
+    { :name => 'foam pit' },
+    { :name => 'flat rail' },
+    { :name => 'sloped rail' },
+    { :name => 'kinked rail' },
+    { :name => 'stairs' },
+    { :name => 'hand rail' },
+    { :name => 'kidney bowl' },
+    { :name => 'egg bowl' },
+    { :name => 'cradle' },
+    { :name => 'jersey barrier' },
+    { :name => 'hubba' }
+])
