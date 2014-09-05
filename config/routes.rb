@@ -1,5 +1,23 @@
 Rails.application.routes.draw do
 
+    # scope :module => :v1 do
+    # namespace :v1 do
+        resources :skate_geo, :path => '/skategeo'
+    # end
+
+  # get 'skate_geo/index'
+
+  # get 'skate_geo/new'
+
+  # get 'skate_geo/create'
+
+  # get 'skate_geo/show'
+
+  # get 'skate_geo/edit'
+
+  # get 'skate_geo/update'
+
+  # get 'skate_geo/destroy'
 
     scope :controller => :skate_map do
         get '/', :to => :index
