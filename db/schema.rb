@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140905142820) do
+ActiveRecord::Schema.define(version: 20140905155045) do
 
   create_table "obstacle_names", force: true do |t|
     t.string   "name",       limit: 25
@@ -20,5 +20,13 @@ ActiveRecord::Schema.define(version: 20140905142820) do
   end
 
   add_index "obstacle_names", ["name"], name: "index_obstacle_names_on_name", unique: true
+
+  create_table "spot_names", force: true do |t|
+    t.string   "name",       limit: 80
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "spot_names", ["name"], name: "index_spot_names_on_name", unique: true
 
 end
