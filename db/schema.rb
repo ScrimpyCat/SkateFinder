@@ -11,15 +11,24 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140905155045) do
+ActiveRecord::Schema.define(version: 20140905161613) do
 
-  create_table "obstacle_names", force: true do |t|
-    t.string   "name",       limit: 25
+  create_table "obstacle_types", force: true do |t|
+    t.string   "name",       limit: 25, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "obstacle_names", ["name"], name: "index_obstacle_names_on_name", unique: true
+  add_index "obstacle_types", ["name"], name: "index_obstacle_types_on_name", unique: true
+
+  create_table "obstacles", force: true do |t|
+    t.integer  "type_id",    null: false
+    t.string   "geometry"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "obstacles", ["type_id"], name: "index_obstacles_on_type_id"
 
   create_table "spot_names", force: true do |t|
     t.string   "name",       limit: 80

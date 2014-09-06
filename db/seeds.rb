@@ -1,4 +1,4 @@
-ObstacleName.create([
+ObstacleType.create([
     { :name => 'quarter pipe' },
     { :name => 'half-pipe' },
     { :name => 'bowl' },
@@ -27,5 +27,6 @@ ObstacleName.create([
     { :name => 'egg bowl' },
     { :name => 'cradle' },
     { :name => 'jersey barrier' },
-    { :name => 'hubba' }
+    { :name => 'hubba' },
+    { :name => 'ledge' }
 ])
