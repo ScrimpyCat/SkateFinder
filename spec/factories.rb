@@ -10,4 +10,8 @@ FactoryGirl.define do
             obstacle.type = FactoryGirl.create(:obstacle_type) if obstacle.type == nil
         end
     end
+
+    factory :spot_name do
+        name 'spot'
+    end
 end
