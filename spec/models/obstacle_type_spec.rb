@@ -46,7 +46,7 @@ RSpec.describe ObstacleType, :type => :model do
                 @obstacle_type.save
                 FactoryGirl.create(:obstacle, :type => @obstacle_type)
             }
-            
+
             it { expect(@obstacle_type.obstacles).to_not be_empty }
             it { expect(@obstacle_type.obstacles.count).to eql(1) }
         end
