@@ -37,7 +37,7 @@ ActiveRecord::Schema.define(version: 20140907114929) do
     t.decimal  "latitude"
     t.string   "geometry"
     t.integer  "name_id"
-    t.integer  "kind"
+    t.boolean  "park"
     t.integer  "style"
     t.boolean  "undercover"
     t.integer  "cost"

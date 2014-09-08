@@ -9,7 +9,7 @@ RSpec.describe SkateSpot, :type => :model do
     it { is_expected.to respond_to(:geometry) }
     it { is_expected.to respond_to(:name) }
     it { is_expected.to respond_to(:alt_names) }
-    it { is_expected.to respond_to(:kind) }
+    it { is_expected.to respond_to(:park) }
     it { is_expected.to respond_to(:style) }
     it { is_expected.to respond_to(:undercover) }
     it { is_expected.to respond_to(:cost) }
@@ -88,6 +88,13 @@ RSpec.describe SkateSpot, :type => :model do
 
             it { is_expected.to be_valid }
             it { expect(subject.obstacles).to be_empty }
+        end
+    end
+
+    describe 'location' do
+        context 'has no geometry' do
+            before { @skate_spot.geometry = nil }
+            it { is_expected.to_not be_valid }
         end
     end
 end

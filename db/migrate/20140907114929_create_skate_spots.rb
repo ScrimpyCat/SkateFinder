@@ -3,9 +3,9 @@ class CreateSkateSpots < ActiveRecord::Migration
         create_table :skate_spots do |t|
             t.decimal :longitude
             t.decimal :latitude
-            t.string :geometry
+            t.string :geometry, :null => false
             t.references :name, :index => true
-            t.integer :kind
+            t.boolean :park
             t.integer :style
             t.boolean :undercover
             t.integer :cost

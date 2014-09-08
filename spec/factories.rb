@@ -24,7 +24,7 @@ FactoryGirl.define do
         longitude 0.5
         latitude 0.5
         geometry '"type": "Polygon","coordinates": [[0,0],[1,0],[1,1],[0,1]]'
-        kind 0
+        park false
         style 0
         undercover false
         cost 0
