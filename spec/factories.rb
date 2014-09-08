@@ -25,7 +25,7 @@ FactoryGirl.define do
         latitude 0.5
         geometry '"type": "Polygon","coordinates": [[0,0],[1,0],[1,1],[0,1]]'
         park false
-        style 0
+        style SkateSpot::Style[:unknown]
         undercover false
         cost 0
         currency 'AUD'
