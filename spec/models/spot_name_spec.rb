@@ -1,15 +1,15 @@
 require 'rails_helper'
 
 RSpec.describe SpotName, :type => :model do
-	before { @spot_name = FactoryGirl.build(:spot_name) }
-	subject { @spot_name }
+    before { @spot_name = FactoryGirl.build(:spot_name) }
+    subject { @spot_name }
 
-	it { is_expected.to respond_to(:name) }
+    it { is_expected.to respond_to(:name) }
     it { is_expected.to respond_to(:spot) }
 
-	it { is_expected.to be_valid }
+    it { is_expected.to be_valid }
 
-	describe 'name' do
+    describe 'name' do
         context 'is empty' do
             before { @spot_name.name = '' }
             it { is_expected.to_not be_valid }
