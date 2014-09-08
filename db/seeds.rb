@@ -30,8 +30,3 @@ ObstacleType.create([
     { :name => 'hubba' },
     { :name => 'ledge' }
 ])
-
-
-spot_name = SpotName.create!(:name => 'test')
-s = SpotName.create!([{:name => 'one'}, {:name => 'two'}])
-SkateSpot.create!(:name => spot_name, :alternative_names => [spot_name])

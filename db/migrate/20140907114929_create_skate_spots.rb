@@ -6,7 +6,7 @@ class CreateSkateSpots < ActiveRecord::Migration
       t.string :geometry
       t.references :name, :index => true
       # t.references :alt_names, :index => true
-      t.integer :type
+      t.integer :kind
       t.integer :style
       t.boolean :undercover
       t.integer :cost

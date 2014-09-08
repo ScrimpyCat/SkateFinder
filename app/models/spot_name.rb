@@ -1,5 +1,6 @@
 class SpotName < ActiveRecord::Base
     validates :name, :presence => true, :length => { :maximum => 80 }, :uniqueness => { :case_sensitive => false }
+    validates :spot, :presence => true
 
-    has_many :spots, :through => :alt_name
+    belongs_to :spot, :class_name => 'SkateSpot'
 end

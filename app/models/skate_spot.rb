@@ -1,8 +1,7 @@
 class SkateSpot < ActiveRecord::Base
-	# validates :currency, :length => { :minimum => 3, :maximum => 3 }
+	validates :currency, :allow_blank => true, :length => { :is => 3 }
 
 	belongs_to :name, :class_name => 'SpotName'
-	has_many :alt_names, :foreign_key => :spot
-	has_many :alternative_names, :through => :alt_names, :source => :name
-	# has_many :obstacles
+	has_many :alt_names, :class_name => 'SpotName', :foreign_key => :spot_id, :dependent => :destroy
+	has_many :obstacles, :foreign_key => :spot_id, :dependent => :destroy
 end

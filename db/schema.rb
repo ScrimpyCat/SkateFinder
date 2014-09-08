@@ -11,18 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140907220705) do
-
-  create_table "alt_names", force: true do |t|
-    t.integer  "spot_id",    null: false
-    t.integer  "name_id",    null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "alt_names", ["name_id"], name: "index_alt_names_on_name_id"
-  add_index "alt_names", ["spot_id", "name_id"], name: "index_alt_names_on_spot_id_and_name_id", unique: true
-  add_index "alt_names", ["spot_id"], name: "index_alt_names_on_spot_id"
+ActiveRecord::Schema.define(version: 20140907114929) do
 
   create_table "obstacle_types", force: true do |t|
     t.string   "name",       limit: 25, null: false
@@ -35,10 +24,12 @@ ActiveRecord::Schema.define(version: 20140907220705) do
   create_table "obstacles", force: true do |t|
     t.integer  "type_id",    null: false
     t.string   "geometry"
+    t.integer  "spot_id",    null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
+  add_index "obstacles", ["spot_id"], name: "index_obstacles_on_spot_id"
   add_index "obstacles", ["type_id"], name: "index_obstacles_on_type_id"
 
   create_table "skate_spots", force: true do |t|
@@ -46,7 +37,7 @@ ActiveRecord::Schema.define(version: 20140907220705) do
     t.decimal  "latitude"
     t.string   "geometry"
     t.integer  "name_id"
-    t.integer  "type"
+    t.integer  "kind"
     t.integer  "style"
     t.boolean  "undercover"
     t.integer  "cost"
@@ -61,10 +52,11 @@ ActiveRecord::Schema.define(version: 20140907220705) do
 
   create_table "spot_names", force: true do |t|
     t.string   "name",       limit: 80, null: false
+    t.integer  "spot_id",               null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "spot_names", ["name"], name: "index_spot_names_on_name", unique: true
+  add_index "spot_names", ["spot_id"], name: "index_spot_names_on_spot_id"
 
 end
