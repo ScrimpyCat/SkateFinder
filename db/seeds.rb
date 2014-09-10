@@ -32,7 +32,15 @@ ObstacleType.create([
 ])
 
 riverslide_park = SkateSpot.new({
-    :geometry => '"type": "Polygon","coordinates": [[0,0],[1,0],[1,1],[0,1]]',
+    :longitude => 0.5, #remove later
+    :latitude => 0.5, #remove later
+    :geometry => [
+            [144.97301369905472, -37.82018578464621],
+            [144.97276961803436, -37.820827772676125],
+            [144.97300565242767, -37.82087650421276],
+            [144.9732604622841, -37.82025782318512],
+            [144.97301369905472, -37.82018578464621]
+        ].to_s[1..-2],
     :park => true,
     :style => SkateSpot::Style[:street] | SkateSpot::Style[:vert],
     :undercover => false,

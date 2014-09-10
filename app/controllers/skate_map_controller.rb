@@ -9,6 +9,6 @@ class SkateMapController < ApplicationController
 
         }
 
-        puts @markers
+        # puts @markers
     end
 end

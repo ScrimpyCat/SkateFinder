@@ -2,7 +2,7 @@ Rails.application.routes.draw do
 
     # scope :module => :v1 do
     # namespace :v1 do
-        resources :skate_geo, :path => '/skategeo'
+        resources :skate_geo, :path => '/skategeo', :except => [:edit, :new]
     # end
 
   # get 'skate_geo/index'

@@ -1,6 +1,4 @@
 json.type "FeatureCollection"
-json.features do
-    json.array! [
-        3
-    ]
+json.features @spots do |spot|
+	json.partial! 'spot', :spot => spot
 end
