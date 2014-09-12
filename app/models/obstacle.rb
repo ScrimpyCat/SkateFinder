@@ -9,7 +9,7 @@ class Obstacle < ActiveRecord::Base
         end
     }
 
-    validates :geometry, :allow_nil => true, :format => { :with => /\A\[(\[[-\d.]+,[-\d.]+\]),(\[[-\d.]+,[-\d.]+\],){2,}\1\]\z/ }
+    validates :geometry, :allow_nil => true, :polygon => true #:format => { :with => /\A\[(\[[-\d.]+,[-\d.]+\]),(\[[-\d.]+,[-\d.]+\],){2,}\1\]\z/ }
     validates :type, :presence => true
     validates :spot, :presence => true
 

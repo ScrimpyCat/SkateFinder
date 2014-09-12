@@ -14,7 +14,7 @@ class SkateSpot < ActiveRecord::Base
             end
         end
     }
-    validates :geometry, :presence => true, :format => { :with => /\A\[(\[[-\d.]+,[-\d.]+\]),(\[[-\d.]+,[-\d.]+\],){2,}\1\]\z/ }
+    validates :geometry, :presence => true, :polygon => true #:format => { :with => /\A\[(\[[-\d.]+,[-\d.]+\]),(\[[-\d.]+,[-\d.]+\],){2,}\1\]\z/ }
     validates :currency, :allow_blank => true, :length => { :is => 3 }
 
     belongs_to :name, :class_name => 'SpotName'
