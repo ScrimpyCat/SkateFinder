@@ -4,7 +4,7 @@ FactoryGirl.define do
     end
 
     factory :obstacle do
-        geometry '[[0,0],[1,0],[1,1],[0,1]]'
+        geometry '[[0,0],[1,0],[1,1],[0,1],[0,0]]'
 
         after :build do |obstacle, evaluator|
             obstacle.type ||= FactoryGirl.create(:obstacle_type)
@@ -23,7 +23,7 @@ FactoryGirl.define do
     factory :skate_spot do
         longitude 0.5
         latitude 0.5
-        geometry '[[0,0],[1,0],[1,1],[0,1]]'
+        geometry '[[0,0],[1,0],[1,1],[0,1],[0,0]]'
         park false
         style SkateSpot::Style[:unknown]
         undercover false

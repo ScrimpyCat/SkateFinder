@@ -18,9 +18,12 @@
         def parse_boolean(attribute, params)
             info = {}
             if params.has_key?(attribute)
-                if params[attribute].kind_of? String
-                    info[attribute] = params[attribute].to_bool
-                    raise ArgumentError, 'Argument cannot be parsed as boolean' unless info[attribute]
+                value = params[attribute]
+                if value.kind_of? String
+                    info[attribute] = value.to_bool
+                    raise ArgumentError, 'Argument cannot be parsed as boolean' if info[attribute] == nil
+                elsif value.kind_of? TrueClass or value.kind_of? FalseClass
+                    info[attribute] = value
                 else
                     info[attribute] = nil
                 end
@@ -37,19 +40,37 @@
                     info[:alt_names] = params[:alt_names]
                 elsif params[:alt_names] == nil
                     info[:alt_names] = []
-                else
+                elsif params[:alt_names].kind_of? String
                     info[:alt_names] = [params[:alt_names]]
+                else
+                    raise ArgumentError
                 end
             end
 
-            info[:name] = params[:name]
+            if params.has_key?(:name)
+                raise ArgumentError if !params[:name].kind_of? String and params[:name] != nil
+                info[:name] = params[:name]
+            end
+
+
+            info[:geometry] = params[:geometry] if params.has_key?(:geometry)            
             info.merge!(parse_boolean(:park, params))
-            info[:style] = (params[:style] == nil ? nil : params[:style].to_i) if params.has_key?(:style)
+            info[:style] = (params[:style] == nil ? nil : Integer(params[:style])) if params.has_key?(:style)
             info.merge!(parse_boolean(:undercover, params))
-            info[:cost] = (params[:cost] == nil ? nil : params[:cost].to_f) if params.has_key?(:cost)
+            info[:cost] = (params[:cost] == nil ? nil : Integer(params[:cost])) if params.has_key?(:cost)
             info[:currency] = params[:currency] if params.has_key?(:currency)
             info.merge!(parse_boolean(:lights, params))
             info.merge!(parse_boolean(:private_property, params))
+
+            if params.has_key?(:obstacles)
+                if params[:obstacles].kind_of? Array
+                    info[:obstacles] = params[:obstacles]
+                elsif params[:obstacles] == nil
+                    info[:obstacles] = []
+                else
+                    info[:obstacles] = [params[:obstacles]]
+                end
+            end
 
             info
 
@@ -59,23 +80,27 @@
 
         #curl -i -H "Accept: application/json" -X POST -d "geometry=[0,0],[0,1],[1,0],[0,0]" http://0.0.0.0:3000/skategeo/
         def create
-            spot = SkateSpot.new({
-                :longitude => 0.5, #remove later
-                :latitude => 0.5, #remove later
-                :geometry => params[:geometry],
-                :park => params[:park],
-                :style => params[:style],
-                :undercover => params[:undercover],
-                :cost => params[:cost],
-                :currency => params[:currency],
-                :lights => params[:lights],
-                :private_property => params[:private_property]
-            })
-            spot.save
+            if info = parse_input(params)
+                name = info.delete(:name)
+                alt_names = info.delete(:alt_names)
+                obstacles = info.delete(:obstacles)
+
+                if spot = SkateSpot.new(info)
+                    spot.alt_names = alt_names.map! { |n| SpotName.find_or_create_by(:name => n, :spot => spot) } if alt_names
+                    spot.name = SpotName.find_or_create_by(:name => name, :spot => spot) if name
+                    spot.obstacles = obstacles.map! { |o| Obstacle.create(:type => ObstacleType.where(:name => o['type']).first, :geometry => o['geometry'], :spot => spot) } if obstacles
+
+                    return render :json => { :status => (spot.save == true ? :success : :unprocessable_entity) }
+                end
+            end
+
             render :json => { :status => :unprocessable_entity }
+
+            rescue ActiveRecord::RecordNotSaved
+                render :json => { :status => :unprocessable_entity }
         end
 
-        #GET /:id ?detailed, geo, name, alt_name, park, style, undercover, cost, lights, private_property, obstacles
+        #GET /:id ?detailed, geo, name, alt_names, park, style, undercover, cost, lights, private_property, obstacles
         #curl -i -H "Accept: application/json" -G -d "geo=false&name=true&alt_names=true" http://0.0.0.0:3000/skategeo/1/
         def show
             if @spot = SkateSpot.where(:id => params[:id]).first
@@ -104,34 +129,28 @@
 
         #curl -i -H "Accept: application/json" -X PUT -d "name=testing" http://0.0.0.0:3000/skategeo/1/
         def update
-            if spot = SkateSpot.where(:id => params[:id]).first
-                # if params.has_key?(:alt_names)
-                #     if params[:alt_names].kind_of? Array
-                #         spot.update(:alt_names => params[:alt_names].map { |n| SpotName.create(:name => n, :spot => spot) })
-                #     elsif params[:alt_names] == nil
-                #         spot.update(:alt_names => [])
-                #     else
-                #         spot.update(:alt_names => [SpotName.create(:name => params[:alt_names], :spot => spot)])
-                #     end
-                # end
+            if spot = SkateSpot.where(:id => params[:id]).first and info = parse_input(params)
+                if info.has_key?(:alt_names)
+                    info[:alt_names].map! { |n| SpotName.find_or_create_by(:name => n, :spot => spot) }
+                end
 
-                # info = {}
-                # if params[:name]
-                #     info[:name] = SpotName.where(:name => params[:name]).first || SpotName.create(:name => params[:name], :spot => spot)
-                # end
-                # info[:park] = params[:park].to_bool if params.has_key?(:park)
-                # info[:style] = params[:style].to_i if params.has_key?(:style)
-                # info[:undercover] = params[:undercover].to_bool if params.has_key?(:undercover)
-                # info[:cost] = params[:cost].to_f if params.has_key?(:cost)
-                # info[:currency] = params[:currency] if params.has_key?(:currency)
-                # info[:lights] = params[:lights].to_bool if params.has_key?(:lights)
-                # info[:private_property] = params[:private_property].to_bool if params.has_key?(:private_property)
-                parse_input()
+                if info[:name]
+                    info[:name] = SpotName.find_or_create_by(:name => info[:name], :spot => spot) 
+                end
+
+                if info.has_key?(:obstacles)
+                    info[:obstacles].map! { |o|
+                        Obstacle.find_or_create_by(:type => ObstacleType.where(:name => o['type']).first, :geometry => o['geometry'], :spot => spot)
+                    }
+                end
 
                 render :json => { :status => (spot.update(info) == true ? :success : :unprocessable_entity) }
             else
                 render :json => { :status => :unprocessable_entity }
             end
+
+            rescue ActiveRecord::RecordNotSaved
+                render :json => { :status => :unprocessable_entity }
         end
 
         #curl -i -H "Accept: application/json" -X DELETE http://0.0.0.0:3000/skategeo/1/

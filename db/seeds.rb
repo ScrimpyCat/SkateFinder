@@ -40,7 +40,7 @@ riverslide_park = SkateSpot.new({
             [144.97300565242767, -37.82087650421276],
             [144.9732604622841, -37.82025782318512],
             [144.97301369905472, -37.82018578464621]
-        ].to_s[1..-2],
+        ].to_s,
     :park => true,
     :style => SkateSpot::Style[:street] | SkateSpot::Style[:vert],
     :undercover => false,

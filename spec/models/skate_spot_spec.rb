@@ -20,6 +20,18 @@ RSpec.describe SkateSpot, :type => :model do
 
     it { is_expected.to be_valid }
 
+    describe 'destroying' do
+        before {
+            FactoryGirl.create(:spot_name, :spot => @skate_spot)
+            FactoryGirl.create(:obstacle, :spot => @skate_spot)
+            @skate_spot.destroy
+        }
+
+        it { is_expected.to be_destroyed }
+        it { expect(SpotName.all.count).to eql(0) }
+        it { expect(Obstacle.all.count).to eql(0) }
+    end
+
     describe 'name' do
         context 'is missing' do
             before { @skate_spot.name = nil }
@@ -92,9 +104,49 @@ RSpec.describe SkateSpot, :type => :model do
     end
 
     describe 'location' do
-        context 'has no geometry' do
-            before { @skate_spot.geometry = nil }
-            it { is_expected.to_not be_valid }
+        describe 'geometry' do
+            context 'has no geometry' do
+                before { @skate_spot.geometry = nil }
+                it { is_expected.to_not be_valid }
+            end
+
+            describe 'has array' do
+                context 'valid' do
+                    before { @skate_spot.geometry = [[0,0],[0,1],[1,1],[0,0]] }
+                    it { is_expected.to be_valid }
+                end
+
+                context 'invalid' do
+                    before { @skate_spot.geometry = [[0,0],[0,1],[1,1]] }
+                    it { is_expected.to_not be_valid }
+                end
+            end
+
+            context 'has correct structure' do
+                before { @skate_spot.geometry = '[[0,0],  [0,    1],    [1,1],[0,0]]' }
+                it { is_expected.to be_valid }
+            end
+            context 'has correct structure' do
+                before { @skate_spot.geometry = [[0,0],[0,1],[1,1],[0.75,0.75],[0.5,-1],[0.25,0.75],[1,0],[0,0]].to_s }
+                it { is_expected.to be_valid }
+            end
+
+            context 'has incorrect structure' do
+                before { @skate_spot.geometry = [[0,0],[0,1],[1,1],[0.75,0.75],[0.5,1],[0.25,0.75],[1,0],[0,0]].to_s[1..-1] }
+                it { is_expected.to_not be_valid }
+            end
+
+            context 'does not finish with first point' do
+                before { @skate_spot.geometry = [[0,0],[0,1],[1,1],[0.75,0.75],[0.5,1],[0.25,0.75],[1,0]].to_s }
+                it { is_expected.to_not be_valid }
+            end
+
+            context 'has less than four points' do
+                before { @skate_spot.geometry = [[0,0],[0,1],[0,0]].to_s }
+                it { is_expected.to_not be_valid }
+            end
         end
+
+        pending 'test longitude and latitude (make sure centroid of geometry)'
     end
 end
