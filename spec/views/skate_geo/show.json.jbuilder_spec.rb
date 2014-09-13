@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'skate_geo/show.json.jbuilder', :type => :view do
+RSpec.describe 'api/v1/skate_geo/show.json.jbuilder', :type => :view do
     shared_examples 'expected GeoJSON' do
         it 'should render' do
             render
