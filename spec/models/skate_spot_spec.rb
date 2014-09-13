@@ -77,6 +77,93 @@ RSpec.describe SkateSpot, :type => :model do
         end
     end
 
+    describe 'style' do
+        describe 'valid' do
+            context 'integer' do
+                let(:value){ SkateSpot::Style[:street] }
+                before { @skate_spot.style = value }
+
+                it { is_expected.to be_valid }
+                it { expect(subject.style).to eql(value) }
+            end
+
+            context 'string' do
+                let(:value){ SkateSpot::Style[:street] }
+                before { @skate_spot.style = value.to_s }
+
+                it { is_expected.to be_valid }
+                it { expect(subject.style).to eql(value) }
+            end
+
+            context 'nil' do
+                before { @skate_spot.style = nil }
+
+                it { is_expected.to be_valid }
+                it { expect(subject.style).to be_nil }
+            end
+
+            context 'minimum' do
+                let(:value){ SkateSpot::Style[:unknown] }
+                before { @skate_spot.style = value }
+
+                it { is_expected.to be_valid }
+                it { expect(subject.style).to eql(value) }
+            end
+
+            context 'maximum' do
+                let(:value){ SkateSpot::Style.values.inject(:|) }
+                before { @skate_spot.style = value }
+
+                it { is_expected.to be_valid }
+                it { expect(subject.style).to eql(value) }
+            end
+        end
+
+        describe 'invalid' do
+            context 'non-existent flag' do
+                before { @skate_spot.style = SkateSpot::Style.values.inject(:|) + 1 }
+                it { is_expected.to_not be_valid }
+            end
+        end
+    end
+
+    describe 'cost' do
+        describe 'valid' do
+            context 'integer' do
+                before { @skate_spot.cost = 123 }
+
+                it { is_expected.to be_valid }
+                it { expect(subject.cost).to eql(123) }
+            end
+
+            context 'string' do
+                before { @skate_spot.cost = '123' }
+
+                it { is_expected.to be_valid }
+                it { expect(subject.cost).to eql(123) }
+            end
+
+            context 'nil' do
+                before { @skate_spot.cost = nil }
+
+                it { is_expected.to be_valid }
+                it { expect(subject.cost).to be_nil }
+            end
+        end
+
+        describe 'invalid' do
+            context 'float' do
+                before { @skate_spot.cost = 1.50 }
+                it { is_expected.to_not be_valid }
+            end
+
+            context 'non-integer string' do
+                before { @skate_spot.cost = 'test' }
+                it { is_expected.to_not be_valid }
+            end
+        end
+    end
+
     describe 'obstacles' do
         context 'are missing' do
             before { @skate_spot.obstacles = [] }

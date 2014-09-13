@@ -1,5 +1,5 @@
 json.type 'Feature'
-json.id 'obstacle_' + obstacle.type.name.gsub(/ /, '_')
+json.id 'obstacle:' + obstacle.type.name.gsub(/ /, '_')
 
 json.geometry do
 	if obstacle.geometry.nil?

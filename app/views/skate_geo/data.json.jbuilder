@@ -2,7 +2,7 @@ json.object_id @spot.id
 json.name @spot.name.try(:name) if @use[:name] or @detailed
 json.alt_names @spot.alt_names.map { |n| n.name } if @use[:alt_names] or @detailed
 json.park @spot.park if @use[:park] or @detailed
-json.style @spot.style if @use[:style] or @detailed #convert to name
+json.style @spot.style if @use[:style] or @detailed
 json.undercover @spot.undercover if @use[:undercover] or @detailed
 json.cost @spot.cost if @use[:cost] or @detailed
 json.currency @spot.currency if @use[:cost] or @detailed

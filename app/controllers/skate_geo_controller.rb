@@ -55,9 +55,9 @@
 
             info[:geometry] = params[:geometry] if params.has_key?(:geometry)            
             info.merge!(parse_boolean(:park, params))
-            info[:style] = (params[:style] == nil ? nil : Integer(params[:style])) if params.has_key?(:style)
+            info[:style] = params[:style] if params.has_key?(:style)
             info.merge!(parse_boolean(:undercover, params))
-            info[:cost] = (params[:cost] == nil ? nil : Integer(params[:cost])) if params.has_key?(:cost)
+            info[:cost] = params[:cost] if params.has_key?(:cost)
             info[:currency] = params[:currency] if params.has_key?(:currency)
             info.merge!(parse_boolean(:lights, params))
             info.merge!(parse_boolean(:private_property, params))
