@@ -10,7 +10,8 @@ module Api
                 if params.has_key?(:longitude) and params.has_key?(:latitude) and params.has_key?(:area)
                     @spots = SkateSpot.all
 
-                    render 'index.json'
+                    # render :json => { :status => :success, :data => JSON.parse(render_to_string('index.json')) }
+                    render :json => "{\"status\":\"success\",\"data\":#{render_to_string('index.json').presence || 'null'}}"
                 else
                     render :json => { :status => :unprocessable_entity }
                 end
@@ -119,9 +120,11 @@ module Api
                             :private_property => params[:private_property] == 'true',
                             :obstacles => params[:obstacles] == 'true'
                         }
-                        render 'data.json' #JSON
+                        # render :json => { :status => :success, :data => JSON.parse(render('data.json')) } #JSON
+                        render :json => "{\"status\":\"success\",\"data\":#{render_to_string('data.json').presence || 'null'}}"
                     else
-                        render 'show.json' #GeoJSON
+                        # render :json => { :status => :success, :data => JSON.parse(render('show.json')) } #GeoJSON
+                        render :json => "{\"status\":\"success\",\"data\":#{render_to_string('show.json').presence || 'null'}}"
                     end
                 else
                     render :json => { :status => :unprocessable_entity }

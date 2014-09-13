@@ -32,8 +32,8 @@ ObstacleType.create([
 ])
 
 riverslide_park = SkateSpot.new({
-    :longitude => 0.5, #remove later
-    :latitude => 0.5, #remove later
+    :longitude => 144.97301369905472, #remove later
+    :latitude => -37.82018578464621, #remove later
     :geometry => [
             [144.97301369905472, -37.82018578464621],
             [144.97276961803436, -37.820827772676125],
