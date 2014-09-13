@@ -1,39 +1,38 @@
 require 'rails_helper'
 
+RSpec.describe 'skate_geo/index.json.jbuilder', :type => :view do
+    shared_examples 'expected GeoJSON' do
+        it 'should render' do
+            render
 
-RSpec.shared_examples 'expected GeoJSON' do
-    it 'should render' do
-        render
-
-        expect(JSON.parse(rendered)).to eql({
-            'type' => 'FeatureCollection',
-            'features' => @spots.map { |spot|
-                {
-                    'type' => 'Feature',
-                    'id' => 'spot',
-                    'geometry' => {
-                        'type' => 'Point',
-                        'coordinates' => [spot.longitude.to_f, spot.latitude.to_f]
-                    },
-                    'properties' => {
-                        'object_id' => spot.id,
-                        'name' => spot.name.try(:name),
-                        'alt_names' => spot.alt_names.map { |n| n.name },
-                        'park' => spot.park,
-                        'style' => spot.style,
-                        'undercover' => spot.undercover,
-                        'cost' => spot.cost,
-                        'currency' => spot.currency,
-                        'lights' => spot.lights,
-                        'private_property' => spot.private_property
+            expect(JSON.parse(rendered)).to eql({
+                'type' => 'FeatureCollection',
+                'features' => @spots.map { |spot|
+                    {
+                        'type' => 'Feature',
+                        'id' => 'spot',
+                        'geometry' => {
+                            'type' => 'Point',
+                            'coordinates' => [spot.longitude.to_f, spot.latitude.to_f]
+                        },
+                        'properties' => {
+                            'object_id' => spot.id,
+                            'name' => spot.name.try(:name),
+                            'alt_names' => spot.alt_names.map { |n| n.name },
+                            'park' => spot.park,
+                            'style' => spot.style,
+                            'undercover' => spot.undercover,
+                            'cost' => spot.cost,
+                            'currency' => spot.currency,
+                            'lights' => spot.lights,
+                            'private_property' => spot.private_property
+                        }
                     }
                 }
-            }
-        })
+            })
+        end
     end
-end
 
-RSpec.describe 'skate_geo/index.json.jbuilder', :type => :view do
     context 'with no skate spots' do
         before {
             @spots = []

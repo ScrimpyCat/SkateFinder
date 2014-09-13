@@ -78,7 +78,7 @@
                 nil
         end
 
-        #curl -i -H "Accept: application/json" -X POST -d "geometry=[0,0],[0,1],[1,0],[0,0]" http://0.0.0.0:3000/skategeo/
+        #curl -i -H "Accept: application/json" -X POST -d "geometry=[[0,0],[1,0],[0,1],[0,0]]" http://0.0.0.0:3000/skategeo/
         def create
             if info = parse_input(params)
                 name = info.delete(:name)
