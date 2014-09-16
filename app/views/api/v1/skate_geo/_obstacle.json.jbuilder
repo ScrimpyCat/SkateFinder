@@ -6,7 +6,7 @@ json.geometry do
 		json.null!
 	else
 		json.type 'Polygon'
-		json.coordinates [obstacle.geometry[1..-1].gsub(/ /,'').split(',[').map! { |p| p[0..-2].split(',').map! { |c| c.to_f  } }]
+		json.coordinates [obstacle.geometry[2..-2].split(',[').map! { |p| p[0..-2].split(',').map! { |c| c.to_f  } }]
 	end
 end
 

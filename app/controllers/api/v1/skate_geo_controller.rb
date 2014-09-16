@@ -106,23 +106,27 @@ module Api
             #curl -i -H "Accept: application/json" -G -d "geo=false&name=true&alt_names=true" http://0.0.0.0:3000/api/v1/skategeo/1/
             def show
                 if @spot = SkateSpot.where(:id => params[:id]).first
-                    @detailed = params[:detailed] == 'true' ? true : false
+                    @detailed = params[:detailed].try(:to_bool)
 
-                    if params[:geo] == 'false'
+                    if params[:geo].try(:to_bool) == false
                         @use = {
-                            :name => params[:name] == 'true',
-                            :alt_names => params[:alt_names] == 'true',
-                            :park => params[:park] == 'true',
-                            :style => params[:style] == 'true',
-                            :undercover => params[:undercover] == 'true',
-                            :cost => params[:cost] == 'true',
-                            :lights => params[:lights] == 'true',
-                            :private_property => params[:private_property] == 'true',
-                            :obstacles => params[:obstacles] == 'true'
+                            :name => params[:name].try(:to_bool),
+                            :alt_names => params[:alt_names].try(:to_bool),
+                            :park => params[:park].try(:to_bool),
+                            :style => params[:style].try(:to_bool),
+                            :undercover => params[:undercover].try(:to_bool),
+                            :cost => params[:cost].try(:to_bool),
+                            :lights => params[:lights].try(:to_bool),
+                            :private_property => params[:private_property].try(:to_bool),
+                            :obstacles => params[:obstacles].try(:to_bool)
                         }
                         # render :json => { :status => :success, :data => JSON.parse(render('data.json')) } #JSON
                         render :json => "{\"status\":\"success\",\"data\":#{render_to_string('data.json').presence || 'null'}}"
                     else
+                        @use = {
+                            :bounds => params[:bounds].try(:to_bool),
+                            :obstacles => params[:obstacles].try(:to_bool)
+                        }
                         # render :json => { :status => :success, :data => JSON.parse(render('show.json')) } #GeoJSON
                         render :json => "{\"status\":\"success\",\"data\":#{render_to_string('show.json').presence || 'null'}}"
                     end

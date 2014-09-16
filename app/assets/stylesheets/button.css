@@ -1,0 +1,26 @@
+.button {
+    display: inline-block;
+}
+
+.button * {
+    display: block;
+
+    color: #fff;
+
+    text-decoration: none;
+    font-family: "Arial Rounded MT Bold";
+    font-size: 0.9em;
+
+    padding: 7px;
+
+    text-align: center;
+
+    border-radius: 6px;
+    border: 2px solid;
+}
+
+.button *:hover {
+    color: #000;
+    border-color: #fff;
+    background-color: #fff;
+}
