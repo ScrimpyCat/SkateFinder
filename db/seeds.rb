@@ -107,3 +107,45 @@ names = SpotName.create!([
 
 riverslide_park.name = names[0]
 riverslide_park.save
+
+SkateSpot.create({
+    :longitude => 144.67301369905472, #remove later
+    :latitude => -37.82008578464621, #remove later
+    :geometry => [
+            [144.6730123579502, -37.82005082474169],
+            [144.67278034687042, -37.820684867709634],
+            [144.67302174568176, -37.820740485254],
+            [144.67328460216522, -37.82010644276382],
+            [144.6730123579502, -37.82005082474169]
+        ].to_s,
+    :park => false,
+    :style => SkateSpot::Style[:street],
+    :undercover => false,
+    :cost => 0,
+    :lights => true,
+    :private_property => false
+})
+
+
+# 10000.times {
+#     longitude = rand * 360 - 180
+#     latitude = rand * 180 - 90
+
+#     SkateSpot.create({
+#         :longitude => longitude, #remove later
+#         :latitude => latitude, #remove later
+#         :geometry => [
+#                 [1 * longitude, 1 * latitude],
+#                 [1.002 * longitude, 1.0002 * latitude],
+#                 [1.004 * longitude, 1.0004 * latitude],
+#                 [1.001 * longitude, 1.0001 * latitude],
+#                 [1 * longitude, 1 * latitude]
+#             ].to_s,
+#         :park => rand(2),
+#         :style => rand(2) + 1,
+#         :undercover => false,
+#         :cost => 0,
+#         :lights => true,
+#         :private_property => false
+#     })
+# }

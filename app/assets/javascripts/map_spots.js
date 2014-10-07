@@ -34,7 +34,7 @@ SkateObstacle.COLOUR = {
 
     //misc
     "jersey_barrier": new Colour(0, 0.5, 0.5)
-}
+};
 
 SkateObstacle.prototype.showBounds = function(){
     if (((this.polygon === undefined) || (this.polygon === null)) && (this.bounds !== null))
@@ -64,10 +64,27 @@ function SkateObstacle(name, bounds, map)
     this.bounds = bounds;
 }
 
+
+SkateSpot.STYLE = {
+    UNKNOWN: 0,
+    STREET: 1 << 0,
+    VERT: 1 << 1
+};
+
+SkateSpot.prototype.icon = function(){
+    var icon = "/assets/map/icons/44x44/"
+    + (this.info.park? "park" : "spot")
+    + (this.info.style & SkateSpot.STYLE.STREET? "-street" : "")
+    + (this.info.style & SkateSpot.STYLE.VERT? "-vert" : "")
+    + ".png";
+
+    return icon;
+};
+
 SkateSpot.prototype.showMarker = function(){
     if ((this.marker === undefined) || (this.marker === null))
     {
-        this.marker = Map.Marker(Map.Coord(this.center));
+        this.marker = Map.Marker(Map.Coord(this.center), this.icon());
         this.map.addMarker(this.marker);
     }
 };
