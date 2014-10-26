@@ -95,7 +95,7 @@ SkateSpot.prototype.showMarker = function(){
     {
         this.marker = Map.Marker(Map.Coord(this.center), this.icon());
         this.map.addMarker(this.marker);
-        this.marker.addEvent(Map.EVENT.TYPE.CLICK, this.edit.bind(this));
+        this.marker.addEvent(Map.EVENT.CLICK, this.edit.bind(this));
     }
 };
 
@@ -208,7 +208,7 @@ function SkateSpot(data, map)
     this.info = data.properties;
     this.obstacles = []
 
-    this.event = this.map.addEvent(Map.EVENT.TYPE.ZOOM, this.display.bind(this));
+    this.event = this.map.addEvent(Map.EVENT.ZOOM, this.display.bind(this));
 
     this.display();
 }
@@ -236,7 +236,7 @@ $(window).ready(function(){
         }
     });
 
-    map.addEvent(Map.EVENT.TYPE.CLICK, function(){
+    map.addEvent(Map.EVENT.CLICK, function(){
         $("#view").html("");
     });
 });
