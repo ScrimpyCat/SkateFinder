@@ -81,11 +81,21 @@ SkateSpot.prototype.icon = function(){
     return icon;
 };
 
+SkateSpot.prototype.edit = function(){
+    $.ajax({
+        url: "/" + this.info.object_id + "/edit/",
+        success: function(data){
+            $("#view").html(data);
+        }
+    });
+};
+
 SkateSpot.prototype.showMarker = function(){
     if ((this.marker === undefined) || (this.marker === null))
     {
         this.marker = Map.Marker(Map.Coord(this.center), this.icon());
         this.map.addMarker(this.marker);
+        this.marker.addEvent(Map.EVENT.TYPE.CLICK, this.edit.bind(this));
     }
 };
 
@@ -226,7 +236,7 @@ $(window).ready(function(){
         }
     });
 
-    // map.addEvent(Map.EVENT.TYPE.CLICK, function(map, mouse){
-    //     console.log("[" + mouse.latLng.lng() + ", " + mouse.latLng.lat() + "]");
-    // });
+    map.addEvent(Map.EVENT.TYPE.CLICK, function(){
+        $("#view").html("");
+    });
 });
