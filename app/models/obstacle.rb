@@ -1,5 +1,5 @@
 class Obstacle < ActiveRecord::Base
-	before_validation -> {
+    before_validation -> {
         if attribute_present?('geometry')
             if self.geometry.kind_of? String
                 self.geometry.gsub!(/ /, '')

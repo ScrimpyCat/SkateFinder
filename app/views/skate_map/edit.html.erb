@@ -1,0 +1,21 @@
+<%= form_tag "/api/v1/skategeo/#{@spot.id}", :method => :put, :remote => true, :onsubmit => 'return FormFormatter.Edit(this)' do %>
+    Name: <%= text_field_tag :name, @spot.name.try(:name) %> <br/>
+    Alternative Names: <br/>
+    Type: <%= select_tag :park, options_for_select([['Street Spot', false], ['Skate Park', true]], @spot.park) %> <br/>
+    Style: <%= hidden_field_tag :style %>
+    <div id="style-type">
+        <% SkateSpot::Style.each do |k,v| %>
+            <% if k != :unknown %>
+                <!-- <div class="rounded-toggle"> -->
+                    <%= check_box_tag k, v, (@spot.style & v) == v, :name => nil %>
+                    <%= label_tag k %>
+                <!-- </div> -->
+            <% end %>
+        <% end %>
+    </div> <br/>
+    Undercover: <%= check_box_tag :undercover, 1, @spot.undercover %> <br/>
+    Lights: <%= check_box_tag :lights, 1, @spot.lights %> <br/>
+    Private Property: <%= check_box_tag :private_property, 1, @spot.private_property %> <br/>
+    Cost: <%= text_field_tag :cost, @spot.cost %> <br/>
+    <%= submit_tag "Save changes" %>
+<% end %>

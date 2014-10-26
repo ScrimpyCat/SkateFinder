@@ -23,6 +23,7 @@ Rails.application.routes.draw do
 
     scope :controller => :skate_map do
         get '/', :to => :index
+        get '/:id/edit', :to => :edit
     end
   # get 'skate_map/index'
 
