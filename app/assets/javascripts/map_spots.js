@@ -57,6 +57,12 @@ SkateObstacle.prototype.hideBounds = function(){
     }
 };
 
+SkateObstacle.prototype.destroy = function(){
+    this.hideBounds();
+
+    this.map = null;
+};
+
 function SkateObstacle(name, bounds, map)
 {
     this.map = map;
@@ -190,6 +196,75 @@ SkateSpot.prototype.display = function(){
     else this.hideObstacles();
 };
 
+SkateSpot.prototype.update = function(data){
+    if ((!_.isEqual(this.center, data.geometry.coordinates)) ||
+        (this.info.park != data.properties.park) || 
+        (this.info.style != data.properties.style)) this.hideMarker();
+
+    this.center = data.geometry.coordinates;
+    this.info = data.properties;
+
+    if (this.bounds != null)
+    {
+        $.ajax({
+            url: "/api/v1/skategeo/" + this.info.object_id,
+            data: {
+                geo: true
+            },
+            success: function(data){
+                if (data.status == "success")
+                {
+                    var obstacles = this.obstacles, updatedObstacles = [];
+                    var geo = data.data.features;
+                    for (var loop = 0, count = geo.length; loop < count; loop++)
+                    {
+                        var bounds = null;
+                        if (geo[loop].geometry != null)
+                        {
+                            bounds = geo[loop].geometry.coordinates[0];
+                            bounds.pop();
+                        }
+
+                        if (geo[loop].id == "spot_bounds")
+                        {
+                            if (!_.isEqual(this.bounds, bounds)) this.hideBounds();
+                            this.bounds = bounds;
+                        }
+
+                        else if (geo[loop].id.substr(0, 8) == "obstacle")
+                        {
+                            var updated = false;
+                            for (var loop2 = 0, count2 = obstacles.length; loop2 < count2; loop2++)
+                            {
+                                if (bounds != null)
+                                {
+                                    if (_.isEqual(obstacles[loop2].bounds, bounds))
+                                    {
+                                        updated = true;
+                                        updatedObstacles.push(obstacles[loop2]);
+                                        obstacles.splice(loop2, 1);
+                                        break;
+                                    }
+                                }
+                            }
+
+                            if (!updated) updatedObstacles.push(new SkateObstacle(geo[loop].id.slice(9), bounds, this.map));
+                        }
+                    }
+
+                    this.obstacles = updatedObstacles;
+
+                    obstacles.each(SkateObstacle.prototype.destroy);
+                }
+
+                this.display();
+            }.bind(this)
+        });
+    }
+
+    this.display();
+};
+
 SkateSpot.prototype.destroy = function(map){
     this.map.removeEvent(this.event);
 
@@ -215,28 +290,51 @@ function SkateSpot(data, map)
 
 $(window).ready(function(){
     var map = new Map();
-    var skateSpots = []
-
-    $.ajax({
-        url: "/api/v1/skategeo",
-        data: {
-            longitude: 0,
-            latitude: 0,
-            area: 0
-        },
-        success: function(data){
-            if (data.status == "success")
-            {
-                var geo = data.data;
-                for (var loop = 0, count = geo.features.length; loop < count; loop++)
-                {
-                    skateSpots.push(new SkateSpot(geo.features[loop], map));
-                }
-            }
-        }
-    });
+    var skateSpots = [];
 
     map.addEvent(Map.EVENT.CLICK, function(){
         $("#view").html("");
     });
+
+    setInterval(function(){
+        $.ajax({
+            url: "/api/v1/skategeo",
+            data: {
+                longitude: 0,
+                latitude: 0,
+                area: 0
+            },
+            success: function(data){
+                if (data.status == "success")
+                {
+                    var geo = data.data;
+                    var updatedSkateSpots = [];
+                    for (var loop2 = 0, count2 = skateSpots.length; loop2 < count2; loop2++)
+                    {
+                        var updated = false;
+                        for (var loop = 0, count = geo.features.length; loop < count; loop++)
+                        {
+                            if (geo.features[loop].properties.object_id == skateSpots[loop2].info.object_id)
+                            {
+                                skateSpots[loop2].update(geo.features[loop]);
+                                updatedSkateSpots.push(skateSpots[loop2]);
+                                geo.features.splice(loop, 1);
+                                updated = true;
+                                break;
+                            }
+                        }
+
+                        if (updated == false) skateSpots[loop2].destroy();
+                    }
+
+                    skateSpots = updatedSkateSpots;
+
+                    for (var loop = 0, count = geo.features.length; loop < count; loop++)
+                    {
+                        skateSpots.push(new SkateSpot(geo.features[loop], map));
+                    }
+                }
+            }
+        });
+    }, 2000);
 });
