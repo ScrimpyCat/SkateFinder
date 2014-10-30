@@ -15,6 +15,17 @@ class SkateSpot < ActiveRecord::Base
             end
         end
     }
+    after_validation -> {
+        if self.geometry != nil
+            begin
+                coords = JSON.parse(self.geometry)
+                self.longitude = coords[0][0]
+                self.latitude = coords[0][1]
+                #todo: later should work out the centroid of the polygon
+            rescue JSON::ParserError
+            end
+        end
+    }
 
     validates :style, :allow_nil => true, :numericality => { :only_integer => true, :greater_than_or_equal_to => 0, :less_than_or_equal_to => Style.values.inject(:|) }
     validates :cost, :allow_nil => true, :numericality => { :only_integer => true }

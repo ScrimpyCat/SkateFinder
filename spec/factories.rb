@@ -21,8 +21,8 @@ FactoryGirl.define do
     end
 
     factory :skate_spot do
-        longitude 0.5
-        latitude 0.5
+        # longitude 0.5
+        # latitude 0.5
         geometry '[[0,0],[1,0],[1,1],[0,1],[0,0]]'
         park false
         style SkateSpot::Style[:unknown]

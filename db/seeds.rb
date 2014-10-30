@@ -109,8 +109,6 @@ riverslide_park.name = names[0]
 riverslide_park.save
 
 SkateSpot.create({
-    :longitude => 144.67301369905472, #remove later
-    :latitude => -37.82008578464621, #remove later
     :geometry => [
             [144.6730123579502, -37.82005082474169],
             [144.67278034687042, -37.820684867709634],
