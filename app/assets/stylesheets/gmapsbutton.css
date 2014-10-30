@@ -1,0 +1,28 @@
+.gmaps-button {
+    display: inline-block;
+}
+
+.gmaps-button * {
+    display: block;
+
+    color: #333;
+    background-color: #fff;
+
+    text-decoration: none;
+    font-family: "Arial Rounded MT Bold";
+    font-size: 0.9em;
+
+    padding: 7px;
+
+    text-align: center;
+
+    border-radius: 6px;
+    border: 1px solid;
+
+    cursor: pointer;
+    cursor: hand;
+}
+
+.gmaps-button *:hover {
+    background-color: #f0f0f0;
+}

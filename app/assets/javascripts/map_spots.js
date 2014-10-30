@@ -435,4 +435,49 @@ $(window).ready(function(){
             }
         });
     }, 2000);
+
+
+    var toggle = document.createElement("div");
+    $(toggle).css("padding-top", "5px");
+    $(toggle).css("padding-left", "5px");
+    $(toggle).html("<div class='gmaps-button'><strong>Obstacles</strong></div>");
+
+    google.maps.event.addDomListener(toggle, Map.EVENT.CLICK, function(){
+        skateSpots.forEach(function(spot){
+            spot.displaySettings.obstacles = !spot.displaySettings.obstacles;
+        });
+    });
+
+    toggle.index = 1;
+    map.map.controls[google.maps.ControlPosition.TOP_RIGHT].push(toggle);
+
+
+    toggle = document.createElement("div");
+    $(toggle).css("padding-top", "5px");
+    $(toggle).css("padding-left", "5px");
+    $(toggle).html("<div class='gmaps-button'><strong>Bounds</strong></div>");
+
+    google.maps.event.addDomListener(toggle, Map.EVENT.CLICK, function(){
+        skateSpots.forEach(function(spot){
+            spot.displaySettings.bounds = !spot.displaySettings.bounds;
+        });
+    });
+
+    toggle.index = 1;
+    map.map.controls[google.maps.ControlPosition.TOP_RIGHT].push(toggle);
+
+
+    toggle = document.createElement("div");
+    $(toggle).css("padding-top", "5px");
+    $(toggle).css("padding-left", "5px");
+    $(toggle).html("<div class='gmaps-button'><strong>Marker</strong></div>");
+
+    google.maps.event.addDomListener(toggle, Map.EVENT.CLICK, function(){
+        skateSpots.forEach(function(spot){
+            spot.displaySettings.marker = !spot.displaySettings.marker;
+        });
+    });
+
+    toggle.index = 1;
+    map.map.controls[google.maps.ControlPosition.TOP_RIGHT].push(toggle);
 });
