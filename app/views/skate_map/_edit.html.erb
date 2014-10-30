@@ -1,7 +1,7 @@
 <%= form_tag "/api/v1/skategeo/#{@spot.id}", :method => :put, :remote => true, :onsubmit => 'return FormFormatter.Edit(this)' do %>
-    Name: <%= text_field_tag :name, @spot.name.try(:name) %> <br/>
-    Alternative Names: <br/>
-    Type: <%= select_tag :park, options_for_select([['Street Spot', false], ['Skate Park', true]], @spot.park) %> <br/>
+    Name: <%= text_field_tag :name, @spot.name.try(:name) %> <br>
+    Alternative Names: <br>
+    Type: <%= select_tag :park, options_for_select([['Street Spot', false], ['Skate Park', true]], @spot.park) %> <br>
     Style: <%= hidden_field_tag :style %>
     <div id="style-type">
         <% SkateSpot::Style.each do |k,v| %>
@@ -12,10 +12,12 @@
                 <!-- </div> -->
             <% end %>
         <% end %>
-    </div> <br/>
-    Undercover: <%= check_box_tag :undercover, 1, @spot.undercover %> <br/>
-    Lights: <%= check_box_tag :lights, 1, @spot.lights %> <br/>
-    Private Property: <%= check_box_tag :private_property, 1, @spot.private_property %> <br/>
-    Cost: <%= text_field_tag :cost, @spot.cost %> <br/>
+    </div> <br>
+    Undercover: <%= check_box_tag :undercover, 1, @spot.undercover %> <br>
+    Lights: <%= check_box_tag :lights, 1, @spot.lights %> <br>
+    Private Property: <%= check_box_tag :private_property, 1, @spot.private_property %> <br>
+    Cost: <%= text_field_tag :cost, @spot.cost %> <br>
+    Bounds: <div class="button" onclick="BoundsEditor.Edit(<%= @spot.id %>)"><strong>Edit Bounds</strong></div>
+    <%= hidden_field_tag :geometry, @spot.geometry %> <br>
     <%= submit_tag "Save changes" %>
 <% end %>

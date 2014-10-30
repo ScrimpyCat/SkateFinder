@@ -127,7 +127,6 @@ SkateSpot.prototype.showBounds = function(){
 
         else
         {
-            //will need to throttle, and disable until success or failure
             $.ajax({
                 url: "/api/v1/skategeo/" + this.info.object_id,
                 data: {
@@ -186,13 +185,13 @@ SkateSpot.prototype.hideObstacles = function(){
 SkateSpot.prototype.display = function(){
     var zoom = this.map.zoom;
 
-    if (zoom <= 18) this.showMarker();
+    if ((zoom <= 18) && (this.displaySettings.marker)) this.showMarker();
     else this.hideMarker();
 
-    if (zoom >= 16) this.showBounds();
+    if ((zoom >= 16) && (this.displaySettings.bounds)) this.showBounds();
     else this.hideBounds();
 
-    if (zoom >= 19) this.showObstacles();
+    if ((zoom >= 19) && (this.displaySettings.obstacles)) this.showObstacles();
     else this.hideObstacles();
 };
 
@@ -283,18 +282,117 @@ function SkateSpot(data, map)
     this.info = data.properties;
     this.obstacles = []
 
+    this.displaySettings = {
+        marker: true,
+        bounds: true,
+        obstacles: true
+    };
+
     this.event = this.map.addEvent(Map.EVENT.ZOOM, this.display.bind(this));
 
     this.display();
 }
 
+
+BoundsEditor.prototype.disable = function(){
+    if (this.event != null)
+    {
+        this.map.removeEvent(this.event);
+        this.event = null;
+
+        if (this.bounds != null)
+        {
+            this.map.removePolygon(this.bounds);
+            this.bounds = null;
+        }
+
+        Unfocus.event = this.map.addEvent(Map.EVENT.CLICK, Unfocus);
+
+        boundsEditor.disableHook();
+    }
+};
+
+BoundsEditor.prototype.enable = function(){
+    boundsEditor.enableHook();
+
+    if ((this.event === undefined) || (this.event === null))
+    {
+        this.coords = [];
+        this.bounds = null;
+        this.event = this.map.addEvent(Map.EVENT.CLICK, BoundsEditor.prototype.addPoint.bind(this));
+
+        this.map.removeEvent(Unfocus.event);
+        Unfocus.event = null;
+    }
+};
+
+Object.defineProperty(BoundsEditor.prototype, "active", {
+    get: function(){
+        return this.event != undefined && this.event != null;
+    }
+});
+
+BoundsEditor.prototype.addPoint = function(mouse){
+    this.coords.push(mouse.latLng);
+
+    var colour = new Colour(1, 0, 1);
+
+    if (this.bounds != null) this.map.removePolygon(this.bounds);
+
+    this.bounds = Map.Polygon(this.coords, colour.opacity(0.4), colour.opacity(0.2));
+    this.map.addPolygon(this.bounds);
+
+    google.maps.event.addListener(this.bounds, Map.EVENT.CLICK, BoundsEditor.prototype.addPoint.bind(this));
+};
+
+BoundsEditor.Edit = function(id){
+    boundsEditor.disable();
+    if ((boundsEditor.coords != undefined) && (boundsEditor.coords != null) && (boundsEditor.coords.length == 0))
+    {
+        boundsEditor.coords = null;
+        return;
+    }
+
+    var spot = null;
+    for (var loop = 0, count = skateSpots.length; loop < count; loop++)
+    {
+        if (skateSpots[loop].info.object_id == id)
+        {
+            spot = skateSpots[loop];
+            break;
+        }
+    }
+
+    boundsEditor.enableHook = function(){
+        spot.displaySettings.bounds = false;
+    };
+    boundsEditor.disableHook = function(){
+        spot.displaySettings.bounds = true;
+    };
+
+    boundsEditor.enable();
+};
+
+function BoundsEditor(map)
+{
+    this.map = map;
+}
+
+
+Unfocus.event = null;
+
+function Unfocus()
+{
+    $("#view").html("");
+}
+
+
 $(window).ready(function(){
     var map = new Map();
-    var skateSpots = [];
+    skateSpots = [];
+    boundsEditor = new BoundsEditor(map);
 
-    map.addEvent(Map.EVENT.CLICK, function(){
-        $("#view").html("");
-    });
+    Unfocus.event = map.addEvent(Map.EVENT.CLICK, Unfocus);
 
     setInterval(function(){
         $.ajax({
