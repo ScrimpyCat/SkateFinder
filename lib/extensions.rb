@@ -1,1 +1,3 @@
-Dir[File.dirname(__FILE__) + '/extensions/*.rb'].each { |file| require file }
+module Extensions
+	Dir[File.dirname(__FILE__) + '/extensions/*.rb'].each { |file| require file }
+end
