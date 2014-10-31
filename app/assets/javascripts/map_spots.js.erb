@@ -77,14 +77,21 @@ SkateSpot.STYLE = {
     VERT: 1 << 1
 };
 
-SkateSpot.prototype.icon = function(){
-    var icon = "/assets/map/icons/44x44/"
-    + (this.info.park? "park" : "spot")
-    + (this.info.style & SkateSpot.STYLE.STREET? "-street" : "")
-    + (this.info.style & SkateSpot.STYLE.VERT? "-vert" : "")
-    + ".png";
+SkateSpot.ICON = {
+    "park": "<%= image_path('map/icons/44x44/park.png') %>",
+    "park-street": "<%= image_path('map/icons/44x44/park-street.png') %>",
+    "park-vert": "<%= image_path('map/icons/44x44/park-vert.png') %>",
+    "park-street-vert": "<%= image_path('map/icons/44x44/park-street-vert.png') %>",
+    "spot": "<%= image_path('map/icons/44x44/spot.png') %>",
+    "spot-street": "<%= image_path('map/icons/44x44/spot-street.png') %>",
+    "spot-vert": "<%= image_path('map/icons/44x44/spot-vert.png') %>",
+    "spot-street-vert": "<%= image_path('map/icons/44x44/spot-street-vert.png') %>"
+};
 
-    return icon;
+SkateSpot.prototype.icon = function(){
+    return SkateSpot.ICON[(this.info.park? "park" : "spot")
+    + (this.info.style & SkateSpot.STYLE.STREET? "-street" : "")
+    + (this.info.style & SkateSpot.STYLE.VERT? "-vert" : "")];
 };
 
 SkateSpot.prototype.edit = function(){
