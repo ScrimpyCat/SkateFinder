@@ -1,7 +1,10 @@
 Rails.application.routes.draw do
 
+  devise_for :admins
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
     # scope :module => :v1 do
+  root :to => 'skate_map#index'
+  
     namespace :api do
         namespace :v1 do
             resources :skate_geo, :path => '/skategeo', :except => [:edit, :new]
