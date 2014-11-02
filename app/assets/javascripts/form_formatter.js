@@ -21,5 +21,9 @@ FormFormatter = {
         }
 
         return true;
+    },
+    Delete: function(form){
+        $("#view").html("");
+        return true;
     }
-}
+};

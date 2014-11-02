@@ -19,5 +19,9 @@
     Cost: <%= text_field_tag :cost, @spot.cost %> <br>
     Bounds: <div class="button" onclick="BoundsEditor.Edit(<%= @spot.id %>)"><strong>Edit Bounds</strong></div>
     <%= hidden_field_tag :geometry, @spot.geometry %> <br>
-    <%= submit_tag "Save changes" %>
+    <%= submit_tag 'Save changes' %>
+<% end %>
+
+<%= form_tag "/api/v1/skategeo/#{@spot.id}", :method => :delete, :remote => true, :onsubmit => 'return FormFormatter.Delete(this)' do %>
+    <%= submit_tag 'Delete' %>
 <% end %>
