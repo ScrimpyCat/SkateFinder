@@ -20,6 +20,12 @@ FormFormatter = {
             boundsEditor.disable();
         }
 
+        var a = ($(form).children("#name").val() + "," + $(form).children("#alternative_names").val()).split(",").map(function(name){
+            return "<input name=\"alt_names[]\" type=\"hidden\" value=\"" + name + "\">";
+        });
+
+        $(form).children("#alt-names").html(a.join("\n"));
+
         return true;
     },
     Delete: function(form){

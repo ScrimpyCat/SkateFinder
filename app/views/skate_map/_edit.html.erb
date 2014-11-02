@@ -1,6 +1,7 @@
 <%= form_tag "/api/v1/skategeo/#{@spot.id}", :method => :put, :remote => true, :onsubmit => 'return FormFormatter.Edit(this)' do %>
     Name: <%= text_field_tag :name, @spot.name.try(:name) %> <br>
-    Alternative Names: <br>
+    Alternative Names: <div id="alt-names"></div>
+    <%= text_field_tag :alternative_names, @spot.alt_names.map { |alt| alt == @spot.name ? nil : alt.name }.compact.join(','), :name => nil %> <br>
     Type: <%= select_tag :park, options_for_select([['Street Spot', false], ['Skate Park', true]], @spot.park) %> <br>
     Style: <%= hidden_field_tag :style %>
     <div id="style-type">
