@@ -25,7 +25,7 @@ The API allows for creation, update, deletion, and queries (multiple spots in an
 The API calls, all follow this URI scheme: /api/ followed by the version /v1/ followed by the controller managing them /skategeo/
 
 
-Querying all spots in a certain area: GET /api/v1/skategeo  
+#####Querying all spots in a certain area: GET /api/v1/skategeo  
 With parameters:
 
 	required: longitude : float : the longitude the area should revolve around
@@ -44,7 +44,7 @@ Example:
 
 
 
-Querying information of a spot: GET /api/v1/skategeo/1/  
+#####Querying information of a spot: GET /api/v1/skategeo/1/  
 With parameters:
 
 	optional: detailed : bool : whether the result should be detailed or not
@@ -71,7 +71,7 @@ Example:
 
 
 
-Creating a new spot: POST /api/v1/skategeo/  
+#####Creating a new spot: POST /api/v1/skategeo/  
 With parameters:
 
 	required: geometry : polygon array (GeoJSON compliant) : the bounds of the spot
@@ -98,7 +98,7 @@ Example:
 
 
 
-Updating a spot: PUT /api/v1/skategeo/1/  
+#####Updating a spot: PUT /api/v1/skategeo/1/  
 With parameters:
 
 	optional: geometry : polygon array (GeoJSON compliant) : the bounds of the spot
@@ -125,7 +125,7 @@ Example:
 
 
 
-Deleting a spot: DELETE /api/v1/skategeo/1/  
+#####Deleting a spot: DELETE /api/v1/skategeo/1/  
 No parameters.
 
 Returns:
